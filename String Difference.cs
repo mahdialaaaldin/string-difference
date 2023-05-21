@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 public class Program
 {
     static void Main(string[] args)
@@ -8,42 +8,16 @@ public class Program
         Console.Write("Enter second string: ");
         string str2 = Console.ReadLine();
 
-        List<string> results=FindStringDifference(str1, str2);
-
+        List<string> results = FindAllCombinations(FindStringDifference(str1, str2));
         Console.WriteLine("All possible outcomes:");
         foreach (string result in results)
             Console.WriteLine(result);
-
-
     }
-
-    static List<string> FindStringDifference(string str1, string str2)
+    static String FindStringDifference(string str1, string str2)
     {
-        string alphabet = "abcdefghijklmnopqrstuvwxyz";
-        Dictionary<char, int> letterToNumber = new Dictionary<char, int>();
-        for (int i = 0; i < alphabet.Length; i++)
-        {
-            letterToNumber[alphabet[i]] = i;
-        }
-
-        string numStr1 = "", numStr2 = "";
-        foreach (char c in str1)
-        {
-            numStr1 = numStr1 + letterToNumber[c]; 
-        }
-
-        foreach (char c in str2)
-        {
-            numStr2 = numStr2 + letterToNumber[c];
-        }
-
-        int num1 = int.Parse(numStr1),num2 = int.Parse(numStr2);
-
-        int diff = Math.Abs(num1 - num2);
-
-        List<string> results = FindAllCombinations(diff.ToString());
-        return results;
+        return Math.Abs(transformToNumber(str1) - transformToNumber(str2)).ToString();
     }
+  
     static List<string> FindAllCombinations(string str)
     {
         List<string> results = new List<string>();
@@ -63,7 +37,27 @@ public class Program
                 FindAllCombinationsHelper(str.Substring(i), newCombination, results);
         }
     }
+    public static Dictionary<char, int> CreateLetterToNumberDictionary()
+    {
+        string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
+        Dictionary<char, int> letterToNumber = new Dictionary<char, int>();
+        for (int i = 0; i < alphabet.Length; i++)
+        {
+            letterToNumber[alphabet[i]] = i;
+        }
+        return letterToNumber;
+    }
+    public static int transformToNumber(string str)
+    {
+        Dictionary<char, int> letterToNumber = CreateLetterToNumberDictionary();
+        string numStr = "";
+        foreach (char c in str)
+        {
+            numStr = numStr + letterToNumber[c];
+        }
+        return int.Parse(numStr);
+    }
     static string NumberToString(string numberString)
     {
         string[] numbers = numberString.Split(' ');
@@ -77,4 +71,3 @@ public class Program
     }
 
 }
-
